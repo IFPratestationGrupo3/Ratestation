@@ -21,16 +21,16 @@
         </activity>
 
         <!-- Registro con opciones -->
-        <activity android:name=".Activity_Register" />
+        <activity android:name=".Activity_Login" />
 
         <!-- Crear cuenta -->
         <activity android:name=".Activity_CreateAccount" />
 
         <!-- Iniciar sesión -->
-        <activity android:name=".Activity_Login" />
+        <activity android:name=".Activity_Sign" />
 
-        <!-- (Opcional) MainActivity si la app continúa ahí después del login -->
-        <activity android:name=".MainActivity" />
+        <!-- (Opcional) Activity_Main si la app continúa ahí después del login -->
+        <activity android:name=".Activity_Main" />
     </application>
 
 </manifest>

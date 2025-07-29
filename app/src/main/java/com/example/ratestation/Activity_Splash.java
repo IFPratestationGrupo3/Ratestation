@@ -24,7 +24,7 @@ public class Activity_Splash extends AppCompatActivity {
 
 
         new Handler().postDelayed(() -> {
-            Intent intent = new Intent(Activity_Splash.this, Activity_Register.class);
+            Intent intent = new Intent(Activity_Splash.this, Activity_Login.class);
             startActivity(intent);
             finish();
         }, 2000); // 2000 ms = 2 segundos
