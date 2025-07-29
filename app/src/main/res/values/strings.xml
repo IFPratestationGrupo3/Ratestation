@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">RateStation</string>
+    <string name="bienvenido_a_ratestation">Bienvenido a RateStation</string>
+    <string name="login_button_text" >Iniciar sesión</string>
+    <string name="create_account_button_text" >Crear cuenta</string>
+    <string name="Email" >Email</string>
+    <string name="Contraseña" >Contraseña</string>
+    <string name="Entrar" >Entrar</string>
+    <string name="forgot_password_link" >¿Olvidaste tu contraseña?</string>
+</resources>

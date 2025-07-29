@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RateStation</string>
+    <string name="bienvenido_a_ratestation">Welcome to RateStation</string>
+    <string name="bienvenido_a_ratestation">Welcome to RateStation</string>
+    <string name="login_button_text">Login</string>
+    <string name="create_account_button_text">Create account</string>
+    <string name="Email">Email</string>
+    <string name="Contraseña">Password</string>
+    <string name="Entrar">Sign in</string>
+    <string name="forgot_password_link">Forgot your password?</string>
+</resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.ratestation">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="RateStation"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.RateStation">
+
+        <!-- SPLASH: pantalla principal -->
+        <activity
+            android:name=".Activity_Splash"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Registro con opciones -->
+        <activity android:name=".Activity_Register" />
+
+        <!-- Crear cuenta -->
+        <activity android:name=".Activity_CreateAccount" />
+
+        <!-- Iniciar sesión -->
+        <activity android:name=".Activity_Login" />
+
+        <!-- (Opcional) MainActivity si la app continúa ahí después del login -->
+        <activity android:name=".MainActivity" />
+    </application>
+
+</manifest>
