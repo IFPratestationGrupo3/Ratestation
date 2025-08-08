@@ -19,7 +19,7 @@ public class MainPagerAdapter extends FragmentStateAdapter {
             case 1: return new FragmentSeries();
             case 2: return new FragmentJuegos();
             case 3: return new FragmentPodcast();
-            case 4: return new FragmentSettings();
+            case 4: return new FragmentUser();
             default: return new FragmentPeliculas();
         }
     }
