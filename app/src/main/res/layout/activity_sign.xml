@@ -51,7 +51,7 @@
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
 
-        <!-- Link para recuperar contraseña -->
+
         <TextView
             android:id="@+id/forgotPasswordLink"
             android:layout_width="wrap_content"
@@ -64,14 +64,14 @@
             android:gravity="center"
             android:layout_gravity="center_horizontal" />
 
-        <!-- Separador -->
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#AAAAAA"
             android:layout_marginVertical="12dp" />
 
-        <!-- Botón para registrar cuenta nueva -->
+
         <Button
             android:id="@+id/createAccountButton"
             android:layout_width="match_parent"

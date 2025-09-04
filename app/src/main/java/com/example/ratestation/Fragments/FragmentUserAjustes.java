@@ -1,8 +1,9 @@
-package com.example.ratestation;
+package com.example.ratestation.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
+
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -13,14 +14,22 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import com.example.ratestation.Activities.Activity_Login;
+import com.example.ratestation.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class FragmentUserAjustes extends Fragment {
     protected RadioGroup fontSizeRadioGroup;
     protected RadioButton fontNormal;
     protected RadioButton fontLarge;
+
+    protected Button btnCerrarSesion;
+    private FirebaseAuth mAuth; // Variable para la autenticación de Firebase
 
     public FragmentUserAjustes() {}
 
@@ -68,6 +77,41 @@ public class FragmentUserAjustes extends Fragment {
             }
             editor.apply();
             requireActivity().recreate(); // Recargar para aplicar tamaño de fuente
+        });
+
+
+        //-- BOTÓN CERRAR SESIÓN --
+
+        // Se inicializa Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
+
+        btnCerrarSesion = (Button) view.findViewById(R.id.btnCerrarSesion);
+
+        btnCerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cerrarSesion();
+
+            }
+
+            private void cerrarSesion(){
+                mAuth.signOut();
+
+
+                // Usamos getActivity() para obtener el contexto de la actividad que contiene el fragmento
+                Intent intent = new Intent(getActivity(), Activity_Login.class);
+
+                // 6. Se Limpia el historial de actividades para que el usuario no pueda volver atrás y el logout sea correcto
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                startActivity(intent);
+
+                if (getActivity() != null) {
+                    getActivity().finish();
+                }
+            }
+
         });
 
         return view;

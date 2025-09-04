@@ -1,4 +1,4 @@
-package com.example.ratestation;
+package com.example.ratestation.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.ratestation.R;
 
 public class Activity_Splash extends AppCompatActivity {
     @Override

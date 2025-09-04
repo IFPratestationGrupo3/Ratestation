@@ -1,7 +1,12 @@
-package com.example.ratestation;
+package com.example.ratestation.Adapters;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+
+import com.example.ratestation.Fragments.FragmentUserAjustes;
+import com.example.ratestation.Fragments.FragmentUserAmigos;
+import com.example.ratestation.Fragments.FragmentUserEspacio;
+import com.example.ratestation.Fragments.FragmentUserTablon;
 
 public class UserPagerAdapter extends FragmentStateAdapter {
 
