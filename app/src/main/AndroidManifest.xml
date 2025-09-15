@@ -12,7 +12,7 @@
 
         <!-- SPLASH: pantalla principal -->
         <activity
-            android:name=".Activity_Splash"
+            android:name=".Activities.Activity_Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,16 +21,17 @@
         </activity>
 
         <!-- Registro con opciones -->
-        <activity android:name=".Activity_Login" />
+        <activity android:name=".Activities.Activity_Login" />
 
         <!-- Crear cuenta -->
-        <activity android:name=".Activity_CreateAccount" />
+        <activity android:name=".Activities.Activity_CreateAccount" />
 
         <!-- Iniciar sesión -->
-        <activity android:name=".Activity_Sign" />
+        <activity android:name=".Activities.Activity_Sign" />
 
         <!-- (Opcional) Activity_Main si la app continúa ahí después del login -->
-        <activity android:name=".Activity_Main" />
+        <activity android:name=".Activities.Activity_Main" />
+
     </application>
 
 </manifest>

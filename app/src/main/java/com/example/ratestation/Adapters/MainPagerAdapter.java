@@ -1,9 +1,15 @@
-package com.example.ratestation;
+package com.example.ratestation.Adapters;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+
+import com.example.ratestation.Fragments.FragmentJuegos;
+import com.example.ratestation.Fragments.FragmentPeliculas;
+import com.example.ratestation.Fragments.FragmentPodcast;
+import com.example.ratestation.Fragments.FragmentSeries;
+import com.example.ratestation.Fragments.FragmentUser;
 
 public class MainPagerAdapter extends FragmentStateAdapter {
 

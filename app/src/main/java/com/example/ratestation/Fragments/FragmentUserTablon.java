@@ -1,20 +1,25 @@
-package com.example.ratestation;
+package com.example.ratestation.Fragments;
 
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class FragmentSeries extends Fragment {
+import com.example.ratestation.R;
 
-    public FragmentSeries() {
+
+public class FragmentUserTablon extends Fragment {
+
+    public FragmentUserTablon() {
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_series, container, false);
+        return inflater.inflate(R.layout.fragment_user_tablon, container, false);
     }
 }

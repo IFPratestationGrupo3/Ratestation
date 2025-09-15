@@ -7,6 +7,12 @@
     <string name="Contraseña">Contraseña</string>
     <string name="Entrar">Entrar</string>
     <string name="forgot_password_link">¿Olvidaste tu contraseña?</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="poster_description">Imagen del póster de la película</string>
+    <string name="peliculas_m_s_valoradas">Peliculas más valoradas</string>
+    <string name="favoritas">Favoritas</string>
+    <string name="inicio_de_sesi_n_exitoso">Inicio de sesión exitoso</string>
 
 
 </resources>
