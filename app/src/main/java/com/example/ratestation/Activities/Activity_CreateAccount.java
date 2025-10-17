@@ -1,4 +1,5 @@
 package com.example.ratestation.Activities;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -12,7 +13,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Activity_CreateAccount extends AppCompatActivity {
+
     EditText nameInput, emailInput, passwordInput;
     Button registerButton;
 
@@ -37,20 +44,37 @@ public class Activity_CreateAccount extends AppCompatActivity {
             String email = emailInput.getText().toString().trim();
             String password = passwordInput.getText().toString().trim();
 
-            // VALIDACION DE DATOS Y ENVIO
-
             if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
-                registrarUsuarioEnFirebase(name, email, password);
+                verificarNombreUnicoYRegistrar(name, email, password);
             } else {
                 Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+    private void verificarNombreUnicoYRegistrar(String name, String email, String password) {
+        // Verifica si ya existe un usuario con ese nombre
+        db.collection("usuarios")
+                .whereEqualTo("nombre", name)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        // Ya existe un usuario con ese nombre
+                        Toast.makeText(Activity_CreateAccount.this, "El nombre de usuario ya está en uso", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Nombre libre → podemos registrar
+                        registrarUsuarioEnFirebase(name, email, password);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(Activity_CreateAccount.this, "Error al verificar nombre: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+    }
+
     private void registrarUsuarioEnFirebase(String name, String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(Activity_CreateAccount.this, "Registro exitoso.", Toast.LENGTH_SHORT).show();
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         if (firebaseUser != null) {
                             String uid = firebaseUser.getUid();
@@ -65,14 +89,16 @@ public class Activity_CreateAccount extends AppCompatActivity {
     }
 
     private void guardarDatosAdicionales(String uid, String name, String email) {
-        // Asegúrate de que la clase Usuario está creada y es accesible
-        com.example.ratestation.Models.Usuario nuevoUsuario = new com.example.ratestation.Models.Usuario(uid, name, email);
+        Map<String, Object> nuevoUsuario = new HashMap<>();
+        nuevoUsuario.put("uid", uid);
+        nuevoUsuario.put("nombre", name);
+        nuevoUsuario.put("email", email);
+        nuevoUsuario.put("friends", new ArrayList<String>()); // Array vacío de amigos
 
         db.collection("usuarios")
                 .document(uid)
                 .set(nuevoUsuario)
                 .addOnSuccessListener(aVoid -> {
-                    // Reemplaza MainActivity.class por el nombre correcto de tu actividad principal
                     Intent intent = new Intent(Activity_CreateAccount.this, Activity_Main.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
