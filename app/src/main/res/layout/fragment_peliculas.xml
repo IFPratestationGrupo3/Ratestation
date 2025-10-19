@@ -1,55 +1,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Selector horizontal de géneros -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvGeneros"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:paddingBottom="8dp"
-        android:overScrollMode="always"
-        android:scrollbars="horizontal" />
+    <!-- Spinner de géneros -->
 
+    <!-- Lista de películas -->
+    <Spinner
+        android:id="@+id/spinnerGeneros"
+        android:layout_width="378dp"
+        android:layout_height="wrap_content" />
 
-    <!-- Películas más valoradas -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/peliculas_m_s_valoradas"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:paddingTop="16dp"
-        android:paddingBottom="8dp" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvValoradas"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
+        android:layout_weight="1"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
         tools:listitem="@layout/item_pelicula" />
-
-
-
-    <!-- Películas favoritas -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/favoritas"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:paddingTop="16dp"
-        android:paddingBottom="8dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvFavoritas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false"
-        android:overScrollMode="never" />
 
 </LinearLayout>

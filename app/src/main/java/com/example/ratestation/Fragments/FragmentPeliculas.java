@@ -5,11 +5,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,15 +31,35 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FragmentPeliculas extends Fragment {
 
-    private RecyclerView rvGeneros, rvValoradas, rvFavoritas;
+    private Spinner spinnerGeneros;
+    private RecyclerView rvValoradas, rvFavoritas;
+    private List<Pelicula> listaPeliculas = new ArrayList<>();
+    private PeliculaAdapter valoradasAdapter;
 
-    public FragmentPeliculas() {
+    private boolean spinnerInicializado = false;
 
-    }
+    private static final Map<String, Integer> MAPA_GENEROS = new HashMap<String, Integer>() {{
+        put("Acción", 28);
+        put("Drama", 18);
+        put("Comedia", 35);
+        put("Terror", 27);
+        put("Romance", 10749);
+        put("Ciencia Ficción", 878);
+        put("Aventura", 12);
+        put("Musical", 10402);
+        put("Documental", 99);
+        put("Fantasía", 14);
+        put("Suspenso", 53);
+        put("Animación", 16);
+        put("Histórica", 36);
+        put("Crimen", 80);
+    }};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,57 +71,85 @@ public class FragmentPeliculas extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        rvGeneros = view.findViewById(R.id.rvGeneros);
+        spinnerGeneros = view.findViewById(R.id.spinnerGeneros);
         rvValoradas = view.findViewById(R.id.rvValoradas);
-        rvFavoritas = view.findViewById(R.id.rvFavoritas);
+        // AQUI HAY QUE PONER UN APARTADO DE PELICULAS MARCADAS POR MI PARA QUE ME AVISE DE QUE SALIERON
 
-        // Géneros
-        List<String> listaGeneros = Arrays.asList(
-                "Acción", "Drama", "Comedia", "Terror", "Romance",
-                "Ciencia Ficción", "Aventura", "Musical", "Documental",
-                "Fantasía", "Suspenso", "Animación", "Histórica", "Crimen"
+        // Lista de géneros + "Novedades" inicial
+        List<String> listaGeneros = new ArrayList<>();
+        listaGeneros.add("Novedades");
+        listaGeneros.addAll(MAPA_GENEROS.keySet());
+
+        // Configurar el spinner
+        ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(
+                getContext(),
+                android.R.layout.simple_spinner_item,
+                listaGeneros
         );
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerGeneros.setAdapter(adapterSpinner);
 
-        GeneroAdapter adapterGeneros = new GeneroAdapter(listaGeneros, genero -> {
-            Log.d("Filtro", "Género seleccionado: " + genero);
-            Toast.makeText(getContext(), "Filtrando por: " + genero, Toast.LENGTH_SHORT).show();
-        });
-
-        rvGeneros.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        rvGeneros.setAdapter(adapterGeneros);
-
-        // Películas más valoradas
-        List<Pelicula> listaValoradas = new ArrayList<>();
-        PeliculaAdapter valoradasAdapter = new PeliculaAdapter(getContext(), listaValoradas);
-        rvValoradas.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        rvValoradas.setAdapter(valoradasAdapter);
-
-
-        SnapHelper snapHelper = new LinearSnapHelper();
-        snapHelper.attachToRecyclerView(rvValoradas);
-
-
-        cargarPeliculasValoradas(listaValoradas, valoradasAdapter);
-    }
-
-    private void cargarPeliculasValoradas(List<Pelicula> lista, PeliculaAdapter adapter) {
-        new Thread(() -> {
-            String json = TMDB_API.fetchPopularMovies();
-            try {
-                JSONObject root = new JSONObject(json);
-                JSONArray results = root.getJSONArray("results");
-
-                for (int i = 0; i < results.length(); i++) {
-                    JSONObject obj = results.getJSONObject(i);
-                    Pelicula pelicula = new Gson().fromJson(obj.toString(), Pelicula.class);
-                    lista.add(pelicula);
+        spinnerGeneros.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!spinnerInicializado) {
+                    spinnerInicializado = true; // ignorar primera selección automática
+                    cargarPeliculasValoradas(); // cargar novedades al inicio
+                    return;
                 }
 
-                requireActivity().runOnUiThread(adapter::notifyDataSetChanged);
+                String genero = listaGeneros.get(position);
+                if (genero.equals("Novedades")) {
+                    cargarPeliculasValoradas();
+                } else {
+                    int genreId = MAPA_GENEROS.get(genero);
+                    cargarPeliculasPorGenero(genreId);
+                }
 
-            } catch (Exception e) {
-                Log.e("PELIS_ERROR", "Error al parsear JSON", e);
+                Toast.makeText(getContext(), "Filtrando por: " + genero, Toast.LENGTH_SHORT).show();
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // Adaptador de películas
+        valoradasAdapter = new PeliculaAdapter(getContext(), listaPeliculas);
+        rvValoradas.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        rvValoradas.setAdapter(valoradasAdapter);
+
+    }
+
+    private void cargarPeliculasValoradas() {
+        new Thread(() -> {
+            String json = TMDB_API.fetchPopularMovies();
+            procesarPeliculas(json);
         }).start();
+    }
+
+    private void cargarPeliculasPorGenero(int genreId) {
+        new Thread(() -> {
+            String json = TMDB_API.fetchMoviesByGenre(genreId);
+            procesarPeliculas(json);
+        }).start();
+    }
+
+    private void procesarPeliculas(String json) {
+        try {
+            JSONObject root = new JSONObject(json);
+            JSONArray results = root.getJSONArray("results");
+
+            listaPeliculas.clear();
+            for (int i = 0; i < results.length(); i++) {
+                JSONObject obj = results.getJSONObject(i);
+                Pelicula pelicula = new Gson().fromJson(obj.toString(), Pelicula.class);
+                listaPeliculas.add(pelicula);
+            }
+
+            requireActivity().runOnUiThread(() -> valoradasAdapter.notifyDataSetChanged());
+
+        } catch (Exception e) {
+            Log.e("PELIS_ERROR", "Error al parsear JSON", e);
+        }
     }
 }
