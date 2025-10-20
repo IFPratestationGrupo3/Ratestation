@@ -14,23 +14,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SnapHelper;
-
-import com.example.ratestation.Adapters.GeneroAdapter;
 import com.example.ratestation.Adapters.PeliculaAdapter;
 import com.example.ratestation.Apis.TMDB_API;
 import com.example.ratestation.Models.Pelicula;
 import com.example.ratestation.R;
 import com.google.gson.Gson;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

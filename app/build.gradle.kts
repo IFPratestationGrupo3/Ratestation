@@ -14,6 +14,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        // Clave TMDB
         buildConfigField("String", "TMDB_API_KEY", "\"3ea2f57f628b9099353b5842ec2f6d68\"")
         buildConfigField(
             "String",
@@ -21,6 +22,8 @@ android {
             "\"eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzZWEyZjU3ZjYyOGI5MDk5MzUzYjU4NDJlYzJmNmQ2OCIsIm5iZiI6MTc1NjgzNTI3Ny41MTksInN1YiI6IjY4YjcyZGNkNmEyMzc2NjZkYjNmMGEzYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.EWcx09vbagqkKWiT0qLzNHONr_kqwxyc29vbpj8E6ao\""
         )
 
+        // Clave RAWG
+        buildConfigField("String", "RAWG_API_KEY", "\"34f24367ac9e483a84cb3e2fe3a6f713\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
