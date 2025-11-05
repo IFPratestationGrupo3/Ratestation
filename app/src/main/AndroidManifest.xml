@@ -32,6 +32,8 @@
         <!-- (Opcional) Activity_Main si la app continúa ahí después del login -->
         <activity android:name=".Activities.Activity_Main" />
 
+        <activity android:name=".Activities.Activity_Pelicula" />
+
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.example.ratestation.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.ratestation.Activities.Activity_Pelicula;
 import com.example.ratestation.Models.Pelicula;
 import com.example.ratestation.R;
 
@@ -46,6 +48,17 @@ public class PeliculaAdapter extends RecyclerView.Adapter<PeliculaAdapter.ViewHo
 
         holder.txtTitulo.setText(pelicula.getTitulo());
         holder.txtPuntuacion.setText("⭐ " + pelicula.getPuntuacion());
+        // ✅ Evento click en la película
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, Activity_Pelicula.class);
+            // puedes enviar datos básicos de la película
+            intent.putExtra("titulo", pelicula.getTitulo());
+            intent.putExtra("poster", pelicula.getPosterUrl());
+            intent.putExtra("sinopsis", pelicula.getSinopsis());
+            intent.putExtra("fecha", pelicula.getFechaEstreno());
+            intent.putExtra("puntuacion", pelicula.getPuntuacion());
+            context.startActivity(intent);
+        });
     }
 
     @Override

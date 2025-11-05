@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.example.ratestation.Adapters.AmigosAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -30,7 +31,6 @@ public class FragmentUserAmigos extends Fragment {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-
     private EditText editTextSearchUser;
     private Button buttonSearchUser;
     private LinearLayout layoutSearchResults;
@@ -39,7 +39,8 @@ public class FragmentUserAmigos extends Fragment {
     private AmigosAdapter amigosAdapter;
     private List<String> friendsList = new ArrayList<>();
 
-    public FragmentUserAmigos() {}
+    public FragmentUserAmigos() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -159,24 +160,57 @@ public class FragmentUserAmigos extends Fragment {
 
 
     private void cargarAmigos() {
+        if (mAuth.getCurrentUser() == null) return; // seguridad
         String currentUserId = mAuth.getCurrentUser().getUid();
 
         db.collection("usuarios").document(currentUserId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     friendsList.clear();
-                    List<String> friendsIds = (List<String>) documentSnapshot.get("friends");
 
-                    if (friendsIds != null && !friendsIds.isEmpty()) {
-                        for (String id : friendsIds) {
-                            db.collection("usuarios").document(id).get()
-                                    .addOnSuccessListener(friendDoc -> {
-                                        String friendName = friendDoc.getString("nombre");
-                                        friendsList.add(friendName);
-                                        amigosAdapter.notifyDataSetChanged();
-                                    });
+                    Object friendsObj = documentSnapshot.get("friends");
+                    List<String> friendsIds = new ArrayList<>();
+
+                    if (friendsObj instanceof List<?>) {
+                        for (Object obj : (List<?>) friendsObj) {
+                            if (obj instanceof String) {
+                                friendsIds.add((String) obj);
+                            }
                         }
                     }
-                });
+
+                    if (!friendsIds.isEmpty()) {
+                        // Firestore permite máximo 10 elementos en whereIn
+                        // Por eso hay que dividir la lista si es mayor
+                        List<List<String>> partitions = new ArrayList<>();
+                        int partitionSize = 10;
+                        for (int i = 0; i < friendsIds.size(); i += partitionSize) {
+                            partitions.add(friendsIds.subList(i, Math.min(i + partitionSize, friendsIds.size())));
+                        }
+
+                        for (List<String> part : partitions) {
+                            db.collection("usuarios")
+                                    .whereIn(com.google.firebase.firestore.FieldPath.documentId(), part)
+                                    .get()
+                                    .addOnSuccessListener(querySnapshot -> {
+                                        for (DocumentSnapshot friendDoc : querySnapshot.getDocuments()) {
+                                            String friendName = friendDoc.getString("nombre");
+                                            if (friendName != null) {
+                                                friendsList.add(friendName);
+                                            }
+                                        }
+                                        amigosAdapter.notifyDataSetChanged();
+                                    })
+                                    .addOnFailureListener(e -> Log.e("Firebase", "Error cargando amigos", e));
+                        }
+
+                    } else {
+                        // Si no hay amigos, limpiar la lista y notificar
+                        amigosAdapter.notifyDataSetChanged();
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firebase", "Error obteniendo documento del usuario", e));
+
+
     }
 }
 
