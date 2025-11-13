@@ -8,22 +8,24 @@ import okhttp3.Response;
 
 public class TMDB_API {
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
+
     //========================PELICULAS====================================
     public static String fetchPopularMovies() {
-        return fetchFromUrl(BASE_URL + "movie/popular");
+        return fetchFromUrl(BASE_URL + "movie/popular?language=es-ES");
     }
 
     public static String fetchMoviesByGenre(int genreId) {
-        String url = BASE_URL + "discover/movie?with_genres=" + genreId;
+        String url = BASE_URL + "discover/movie?with_genres=" + genreId + "&language=es-ES";
         return fetchFromUrl(url);
     }
+
     //========================SERIES====================================
     public static String fetchPopularSeries() {
-        return fetchFromUrl(BASE_URL + "tv/popular");
+        return fetchFromUrl(BASE_URL + "tv/popular?language=es-ES");
     }
 
     public static String fetchSeriesByGenre(int genreId) {
-        String url = BASE_URL + "discover/tv?with_genres=" + genreId;
+        String url = BASE_URL + "discover/tv?with_genres=" + genreId + "&language=es-ES";
         return fetchFromUrl(url);
     }
 

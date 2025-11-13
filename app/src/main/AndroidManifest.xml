@@ -33,6 +33,9 @@
         <activity android:name=".Activities.Activity_Main" />
 
         <activity android:name=".Activities.Activity_Pelicula" />
+        <activity android:name=".Activities.Activity_Serie" />
+        <!--<activity android:name=".Activities.Activity_Videojuego" />-->
+        <!--<activity android:name=".Activities.Activity_Podcast" />-->
 
     </application>
 

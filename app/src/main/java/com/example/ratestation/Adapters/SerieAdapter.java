@@ -1,6 +1,7 @@
 package com.example.ratestation.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.ratestation.Activities.Activity_Serie;
 import com.example.ratestation.Models.Serie;
 import com.example.ratestation.R;
 
@@ -45,6 +47,16 @@ public class SerieAdapter extends RecyclerView.Adapter<SerieAdapter.ViewHolder> 
 
         holder.txtTitulo.setText(serie.getTitulo());
         holder.txtPuntuacion.setText("⭐ " + serie.getPuntuacion());
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, Activity_Serie.class);
+            intent.putExtra("titulo", serie.getTitulo());
+            intent.putExtra("poster", serie.getPosterUrl());
+            intent.putExtra("descripcion", serie.getSinopsis());
+            intent.putExtra("fecha", serie.getFechaEstreno());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        });
     }
 
     @Override
