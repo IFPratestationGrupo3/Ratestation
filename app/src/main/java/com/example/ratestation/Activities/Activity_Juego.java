@@ -16,24 +16,34 @@ public class Activity_Juego extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego);
 
-        // Referencias
+        // Referencias UI
         TextView txtTitulo = findViewById(R.id.txtTituloDetalle);
         ImageView imgPortada = findViewById(R.id.imgPortadaDetalle);
-        TextView txtPuntuacion = findViewById(R.id.txtPuntuacionDetalle);
         TextView txtFecha = findViewById(R.id.txtFechaDetalle);
+        TextView txtGenero = findViewById(R.id.txtGeneroDetalle);
+        TextView txtPlataformas = findViewById(R.id.txtPlataformasDetalle);
+        TextView txtCalificacion = findViewById(R.id.txtCalificacionDetalle);
+
         Button btnVolver = findViewById(R.id.btnVolver);
 
-        // Recuperar extras
+        // Extras desde el intent
         String titulo = getIntent().getStringExtra("titulo");
         String portada = getIntent().getStringExtra("portada");
         String fecha = getIntent().getStringExtra("fecha");
-        float puntuacion = getIntent().getFloatExtra("puntuacion", 0);
+        String genero = getIntent().getStringExtra("genero");
+        String plataformas = getIntent().getStringExtra("plataformas");
+        String calificacion = getIntent().getStringExtra("calificacion");
 
+        // Asignar datos
         txtTitulo.setText(titulo);
-        txtFecha.setText("Lanzamiento: " + fecha);
-        txtPuntuacion.setText("⭐ " + puntuacion);
+        txtFecha.setText("Fecha de lanzamiento: " + fecha);
+        txtGenero.setText("Género: " + genero);
+        txtPlataformas.setText("Plataformas: " + plataformas);
+        txtCalificacion.setText("Calificación: " + calificacion);
+
         Glide.with(this).load(portada).into(imgPortada);
 
+        // Botón volver
         btnVolver.setOnClickListener(v -> finish());
     }
 }

@@ -1,13 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.FragmentUserEspacio">
+    android:padding="16dp">
 
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Aqui saldran nuestras bibliotecas, fevoritos, puntuaciones, pendientes, etc." />
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
 
-</FrameLayout>
+        <!-- Sección Películas -->
+        <TextView
+            android:id="@+id/txtPeliculasFavoritas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tus Películas Favoritas"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerPeliculasFavoritas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:nestedScrollingEnabled="false"/>
+
+        <!-- Sección Series -->
+        <TextView
+            android:id="@+id/txtSeriesFavoritas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tus Series Favoritas"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerSeriesFavoritas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:nestedScrollingEnabled="false"/>
+
+        <!-- Sección Juegos -->
+        <TextView
+            android:id="@+id/txtJuegosFavoritos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tus Juegos Favoritos"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerJuegosFavoritos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:nestedScrollingEnabled="false"/>
+
+    </LinearLayout>
+</ScrollView>

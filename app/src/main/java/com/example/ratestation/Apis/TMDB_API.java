@@ -1,6 +1,9 @@
 package com.example.ratestation.Apis;
 
 import com.example.ratestation.BuildConfig;
+
+import java.net.URLEncoder;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -22,6 +25,24 @@ public class TMDB_API {
     public static String fetchMovieDetails(int movieId) {
         String url = BASE_URL + "movie/" + movieId + "?language=es-ES&append_to_response=credits";
         return fetchFromUrl(url);
+    }
+    public static String buscarPeliculaPorTitulo(String titulo) {
+        try {
+            String query = URLEncoder.encode(titulo, "UTF-8");
+            String url = BASE_URL + "search/movie?query=" + query + "&language=es-ES";
+            return fetchFromUrl(url);
+        } catch (Exception e) {
+            return "Exception: " + e.getMessage();
+        }
+    }
+    public static String buscarSeriePorTitulo(String titulo) {
+        try {
+            String query = URLEncoder.encode(titulo, "UTF-8");
+            String url = BASE_URL + "search/tv?query=" + query + "&language=es-ES";
+            return fetchFromUrl(url);
+        } catch (Exception e) {
+            return "Exception: " + e.getMessage();
+        }
     }
 
     //========================SERIES====================================

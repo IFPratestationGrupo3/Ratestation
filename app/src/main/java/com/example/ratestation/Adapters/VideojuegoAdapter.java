@@ -1,5 +1,4 @@
 package com.example.ratestation.Adapters;
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -7,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.ratestation.Activities.Activity_Juego;
 import com.example.ratestation.Models.Videojuego;
@@ -18,8 +19,8 @@ import java.util.List;
 
 public class VideojuegoAdapter extends RecyclerView.Adapter<VideojuegoAdapter.ViewHolder> {
 
-    private Context context;
-    private List<Videojuego> juegos;
+    private final Context context;
+    private final List<Videojuego> juegos;
 
     public VideojuegoAdapter(Context context, List<Videojuego> juegos) {
         this.context = context;
@@ -37,20 +38,29 @@ public class VideojuegoAdapter extends RecyclerView.Adapter<VideojuegoAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Videojuego juego = juegos.get(position);
 
+        // Imagen
         Glide.with(context)
-                .load(juego.getImagenUrl())
+                .load(juego.getImagenPortada())
                 .placeholder(R.drawable.ratelogo)
                 .into(holder.imgPortada);
 
-        holder.txtTitulo.setText(juego.getTitulo());
+        // Título
+        holder.txtTitulo.setText(juego.getTitulo() != null ? juego.getTitulo() : "Sin título");
+
+        // Puntuación
         holder.txtPuntuacion.setText("⭐ " + juego.getPuntuacion());
 
+        // Click -> abrir detalles
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, Activity_Juego.class);
+
             intent.putExtra("titulo", juego.getTitulo());
-            intent.putExtra("portada", juego.getImagenUrl());
+            intent.putExtra("portada", juego.getImagenPortada());
             intent.putExtra("fecha", juego.getFechaLanzamiento());
-            intent.putExtra("puntuacion", juego.getPuntuacion());
+            intent.putExtra("genero", juego.getGenerosString());
+            intent.putExtra("plataformas", juego.getPlataformasString());
+            intent.putExtra("calificacion", juego.getCalidadTag());
+
             context.startActivity(intent);
         });
     }
@@ -61,11 +71,13 @@ public class VideojuegoAdapter extends RecyclerView.Adapter<VideojuegoAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
         ImageView imgPortada;
         TextView txtTitulo, txtPuntuacion;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
             imgPortada = itemView.findViewById(R.id.imgPortada);
             txtTitulo = itemView.findViewById(R.id.txtTitulo);
             txtPuntuacion = itemView.findViewById(R.id.txtPuntuacion);
