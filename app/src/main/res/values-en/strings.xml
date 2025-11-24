@@ -8,4 +8,9 @@
     <string name="Contraseña">Password</string>
     <string name="Entrar">Sign in</string>
     <string name="forgot_password_link">Forgot your password?</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="poster_description">Movie poster image</string>
+    <string name="peliculas_m_s_valoradas">Top-rated movies</string>
+    <string name="favoritas">Favorites</string>
+    <string name="inicio_de_sesi_n_exitoso">Login successful</string>
 </resources>

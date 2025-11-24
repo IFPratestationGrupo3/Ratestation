@@ -19,29 +19,32 @@ public class Serie {
     @SerializedName("vote_average")
     private float puntuacion;
 
+    @SerializedName("id")
+    private int id;
+
+    private String director; // puede ser showrunner o creador
+    private String generos;  // nombres separados por coma
+
     // Getters
-    public String getTitulo() {
-        return titulo;
-    }
+    public String getTitulo() { return titulo; }
+    public String getFechaEstreno() { return fechaEstreno; }
+    public String getSinopsis() { return sinopsis; }
+    public String getPosterPath() { return posterPath; }
+    public float getPuntuacion() { return puntuacion; }
+    public String getDirector() { return director; }
+    public String getGeneros() { return generos; }
 
-    public String getFechaEstreno() {
-        return fechaEstreno;
-    }
+    public int getId() { return id; }
 
-    public String getSinopsis() {
-        return sinopsis;
-    }
 
-    public String getPosterPath() {
-        return posterPath;
-    }
+    // Setters para director y generos
+    public void setDirector(String director) { this.director = director; }
+    public void setGeneros(String generos) { this.generos = generos; }
 
-    public float getPuntuacion() {
-        return puntuacion;
-    }
+    public void setId(int id) { this.id = id; }
 
-    // Utilidad para obtener la URL completa del póster
+    // URL completa del póster
     public String getPosterUrl() {
-        return "https://image.tmdb.org/t/p/w500" + posterPath;
+        return posterPath != null ? "https://image.tmdb.org/t/p/w500" + posterPath : null;
     }
 }

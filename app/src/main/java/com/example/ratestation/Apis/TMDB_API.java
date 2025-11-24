@@ -1,7 +1,6 @@
 package com.example.ratestation.Apis;
 
 import com.example.ratestation.BuildConfig;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -19,16 +18,25 @@ public class TMDB_API {
         return fetchFromUrl(url);
     }
 
+    // Detalles de película (por ID), incluyendo director y créditos
+    public static String fetchMovieDetails(int movieId) {
+        String url = BASE_URL + "movie/" + movieId + "?language=es-ES&append_to_response=credits";
+        return fetchFromUrl(url);
+    }
+
     //========================SERIES====================================
     public static String fetchPopularSeries() {
         return fetchFromUrl(BASE_URL + "tv/popular?language=es-ES");
     }
-
     public static String fetchSeriesByGenre(int genreId) {
         String url = BASE_URL + "discover/tv?with_genres=" + genreId + "&language=es-ES";
         return fetchFromUrl(url);
     }
-
+    public static String fetchSeriesDetails(int tvId) {
+        String url = BASE_URL + "tv/" + tvId + "?language=es-ES&append_to_response=credits";
+        return fetchFromUrl(url);
+    }
+    //========================UTILIDADES====================================
     private static String fetchFromUrl(String url) {
         OkHttpClient client = new OkHttpClient();
 

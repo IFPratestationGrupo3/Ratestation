@@ -13,15 +13,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.ratestation.Activities.Activity_Serie;
+import com.example.ratestation.Apis.TMDB_API;
 import com.example.ratestation.Models.Serie;
 import com.example.ratestation.R;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SerieAdapter extends RecyclerView.Adapter<SerieAdapter.ViewHolder> {
 
     private Context context;
     private List<Serie> series;
+    private final ExecutorService executor = Executors.newFixedThreadPool(4);
 
     public SerieAdapter(Context context, List<Serie> series) {
         this.context = context;
@@ -39,23 +46,58 @@ public class SerieAdapter extends RecyclerView.Adapter<SerieAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Serie serie = series.get(position);
 
-        String posterUrl = "https://image.tmdb.org/t/p/w500" + serie.getPosterPath();
+        // Cargar poster y datos básicos
         Glide.with(context)
-                .load(posterUrl)
+                .load(serie.getPosterUrl())
                 .placeholder(R.drawable.ratelogo)
                 .into(holder.imgPoster);
 
         holder.txtTitulo.setText(serie.getTitulo());
         holder.txtPuntuacion.setText("⭐ " + serie.getPuntuacion());
 
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, Activity_Serie.class);
-            intent.putExtra("titulo", serie.getTitulo());
-            intent.putExtra("poster", serie.getPosterUrl());
-            intent.putExtra("descripcion", serie.getSinopsis());
-            intent.putExtra("fecha", serie.getFechaEstreno());
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+        holder.itemView.setOnClickListener(v -> loadSerieDetailsAndOpenActivity(serie));
+    }
+
+    private void loadSerieDetailsAndOpenActivity(Serie serie) {
+        executor.execute(() -> {
+            try {
+                // Obtener detalles de la serie desde TMDB
+                String detallesJson = TMDB_API.fetchSeriesDetails(serie.getId());
+                JSONObject json = new JSONObject(detallesJson);
+
+                // Director / showrunner
+                JSONArray creators = json.getJSONArray("created_by");
+                String director = "";
+                if (creators.length() > 0) {
+                    director = creators.getJSONObject(0).getString("name");
+                }
+                serie.setDirector(director);
+
+                // Géneros
+                JSONArray genresArray = json.getJSONArray("genres");
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < genresArray.length(); i++) {
+                    sb.append(genresArray.getJSONObject(i).getString("name"));
+                    if (i < genresArray.length() - 1) sb.append(", ");
+                }
+                serie.setGeneros(sb.toString());
+
+                // Lanzar Activity en UI thread
+                ((android.app.Activity) context).runOnUiThread(() -> {
+                    Intent intent = new Intent(context, Activity_Serie.class);
+                    intent.putExtra("titulo", serie.getTitulo());
+                    intent.putExtra("poster", serie.getPosterUrl());
+                    intent.putExtra("anio", serie.getFechaEstreno() != null && serie.getFechaEstreno().length() >= 4 ?
+                            serie.getFechaEstreno().substring(0, 4) : "");
+                    intent.putExtra("sinopsis", serie.getSinopsis());
+                    intent.putExtra("director", serie.getDirector());
+                    intent.putExtra("generos", serie.getGeneros());
+                    context.startActivity(intent);
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 
