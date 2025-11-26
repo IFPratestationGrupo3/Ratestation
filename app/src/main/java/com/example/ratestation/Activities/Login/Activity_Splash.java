@@ -1,4 +1,4 @@
-package com.example.ratestation.Activities;
+package com.example.ratestation.Activities.Login;
 
 import android.content.Intent;
 import android.os.Bundle;

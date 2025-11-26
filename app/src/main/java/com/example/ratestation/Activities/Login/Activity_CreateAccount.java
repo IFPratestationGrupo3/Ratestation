@@ -1,4 +1,4 @@
-package com.example.ratestation.Activities;
+package com.example.ratestation.Activities.Login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ratestation.Activities.Activity_Main;
 import com.example.ratestation.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -15,7 +16,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Activity_CreateAccount extends AppCompatActivity {

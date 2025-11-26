@@ -3,12 +3,14 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ratestation.Adapters.FavPeliculasAdapter;
-import com.example.ratestation.Adapters.FavSeriesAdapter;
+import com.example.ratestation.Adapters.Favoritos.FavPeliculasAdapter;
+import com.example.ratestation.Adapters.Favoritos.FavSeriesAdapter;
+import com.example.ratestation.Adapters.Favoritos.FavJuegosAdapter; // <-- NUEVO
 import com.example.ratestation.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,6 +33,11 @@ public class FragmentUserEspacio extends Fragment {
     private FavSeriesAdapter adapterSeries;
     private List<String> titulosSeriesFav = new ArrayList<>();
 
+    // Juegos (NUEVO)
+    private RecyclerView recyclerJuegos;
+    private FavJuegosAdapter adapterJuegos;
+    private List<String> titulosJuegosFav = new ArrayList<>();
+
     public FragmentUserEspacio() { }
 
     @Override
@@ -42,24 +49,32 @@ public class FragmentUserEspacio extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Recycler de películas favoritas
+        // Películas
         recyclerPeliculas = view.findViewById(R.id.recyclerPeliculasFavoritas);
         recyclerPeliculas.setLayoutManager(new LinearLayoutManager(getContext()));
         adapterPeliculas = new FavPeliculasAdapter(getContext(), titulosPeliculasFav);
         recyclerPeliculas.setAdapter(adapterPeliculas);
 
-        // Recycler de series favoritas
+        // Series
         recyclerSeries = view.findViewById(R.id.recyclerSeriesFavoritas);
         recyclerSeries.setLayoutManager(new LinearLayoutManager(getContext()));
         adapterSeries = new FavSeriesAdapter(getContext(), titulosSeriesFav);
         recyclerSeries.setAdapter(adapterSeries);
 
+        // Juegos (NUEVO)
+        recyclerJuegos = view.findViewById(R.id.recyclerJuegosFavoritos);
+        recyclerJuegos.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapterJuegos = new FavJuegosAdapter(getContext(), titulosJuegosFav);
+        recyclerJuegos.setAdapter(adapterJuegos);
+
         // Cargar datos
         cargarPeliculasFavoritas();
         cargarSeriesFavoritas();
+        cargarJuegosFavoritos(); // NUEVO
 
         return view;
     }
+
     @SuppressWarnings("unchecked")
     private void cargarPeliculasFavoritas() {
         if (mAuth.getCurrentUser() == null) return;
@@ -76,6 +91,7 @@ public class FragmentUserEspacio extends Fragment {
                     }
                 });
     }
+
     @SuppressWarnings("unchecked")
     private void cargarSeriesFavoritas() {
         if (mAuth.getCurrentUser() == null) return;
@@ -89,6 +105,24 @@ public class FragmentUserEspacio extends Fragment {
                         titulosSeriesFav.clear();
                         titulosSeriesFav.addAll(favoritas);
                         adapterSeries.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    // ⭐ NUEVO: cargar juegos favoritos
+    @SuppressWarnings("unchecked")
+    private void cargarJuegosFavoritos() {
+        if (mAuth.getCurrentUser() == null) return;
+
+        String userId = mAuth.getCurrentUser().getUid();
+
+        db.collection("usuarios").document(userId).get()
+                .addOnSuccessListener(doc -> {
+                    List<String> favoritas = (List<String>) doc.get("JuegosFav");
+                    if (favoritas != null) {
+                        titulosJuegosFav.clear();
+                        titulosJuegosFav.addAll(favoritas);
+                        adapterJuegos.notifyDataSetChanged();
                     }
                 });
     }

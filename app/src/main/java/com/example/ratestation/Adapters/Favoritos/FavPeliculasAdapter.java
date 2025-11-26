@@ -1,4 +1,5 @@
-package com.example.ratestation.Adapters;
+package com.example.ratestation.Adapters.Favoritos;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -18,12 +19,12 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class FavSeriesAdapter extends RecyclerView.Adapter<FavSeriesAdapter.ViewHolder> {
+public class FavPeliculasAdapter extends RecyclerView.Adapter<FavPeliculasAdapter.ViewHolder> {
 
     private Context context;
     private List<String> titulos;
 
-    public FavSeriesAdapter(Context context, List<String> titulos) {
+    public FavPeliculasAdapter(Context context, List<String> titulos) {
         this.context = context;
         this.titulos = titulos;
     }
@@ -43,7 +44,8 @@ public class FavSeriesAdapter extends RecyclerView.Adapter<FavSeriesAdapter.View
         holder.itemView.setOnClickListener(v -> {
             new Thread(() -> {
                 try {
-                    String searchJson = TMDB_API.buscarSeriePorTitulo(titulo);
+                    // Buscar película usando TMDB_API
+                    String searchJson = TMDB_API.buscarPeliculaPorTitulo(titulo);
                     JSONObject root = new JSONObject(searchJson);
                     JSONArray results = root.getJSONArray("results");
 
@@ -54,19 +56,26 @@ public class FavSeriesAdapter extends RecyclerView.Adapter<FavSeriesAdapter.View
                         return;
                     }
 
-                    JSONObject serieJson = results.getJSONObject(0);
-                    int id = serieJson.getInt("id");
-                    String poster = "https://image.tmdb.org/t/p/w500" + serieJson.getString("poster_path");
-                    String anio = serieJson.getString("first_air_date").substring(0, 4);
-                    String sinopsis = serieJson.getString("overview");
+                    JSONObject peliculaJson = results.getJSONObject(0);
+                    int id = peliculaJson.getInt("id");
+                    String poster = "https://image.tmdb.org/t/p/w500" + peliculaJson.getString("poster_path");
+                    String anio = peliculaJson.getString("release_date").substring(0, 4);
+                    String sinopsis = peliculaJson.getString("overview");
 
                     // Obtener detalles completos
-                    String detallesJson = TMDB_API.fetchSeriesDetails(id);
+                    String detallesJson = TMDB_API.fetchMovieDetails(id);
                     JSONObject detallesObj = new JSONObject(detallesJson);
 
-                    // Director / creador principal
-                    JSONArray creators = detallesObj.getJSONArray("created_by");
-                    String creador = creators.length() > 0 ? creators.getJSONObject(0).getString("name") : "";
+                    // Director
+                    JSONArray crew = detallesObj.getJSONObject("credits").getJSONArray("crew");
+                    String director = "";
+                    for (int i = 0; i < crew.length(); i++) {
+                        JSONObject c = crew.getJSONObject(i);
+                        if ("Director".equals(c.getString("job"))) {
+                            director = c.getString("name");
+                            break;
+                        }
+                    }
 
                     // Géneros
                     JSONArray genresArray = detallesObj.getJSONArray("genres");
@@ -79,7 +88,7 @@ public class FavSeriesAdapter extends RecyclerView.Adapter<FavSeriesAdapter.View
 
                     // Lanzar Activity en hilo principal
                     String finalPoster = poster;
-                    String finalCreador = creador;
+                    String finalDirector = director;
                     String finalGeneros = generos;
                     String finalAnio = anio;
                     String finalSinopsis = sinopsis;
@@ -90,7 +99,7 @@ public class FavSeriesAdapter extends RecyclerView.Adapter<FavSeriesAdapter.View
                         intent.putExtra("poster", finalPoster);
                         intent.putExtra("anio", finalAnio);
                         intent.putExtra("sinopsis", finalSinopsis);
-                        intent.putExtra("director", finalCreador);
+                        intent.putExtra("director", finalDirector);
                         intent.putExtra("generos", finalGeneros);
                         context.startActivity(intent);
                     });

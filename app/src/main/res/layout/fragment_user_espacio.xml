@@ -47,7 +47,7 @@
             android:scrollbars="vertical"
             android:nestedScrollingEnabled="false"/>
 
-        <!-- Sección Juegos -->
+        <!-- Sección Juegos (MODIFICADO Y ORGANIZADO) -->
         <TextView
             android:id="@+id/txtJuegosFavoritos"
             android:layout_width="wrap_content"

@@ -1,4 +1,4 @@
-package com.example.ratestation.Activities;
+package com.example.ratestation.Activities.Login;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;

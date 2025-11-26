@@ -5,59 +5,84 @@
     <LinearLayout
         android:orientation="vertical"
         android:padding="16dp"
-        android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- Portada -->
         <ImageView
             android:id="@+id/imgPortadaDetalle"
             android:layout_width="280dp"
             android:layout_height="380dp"
+            android:layout_gravity="center_horizontal"
             android:scaleType="centerCrop"
             android:layout_marginBottom="20dp" />
 
+        <!-- Título -->
         <TextView
             android:id="@+id/txtTituloDetalle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="18dp" />
 
-        <TextView
-            android:id="@+id/txtFechaDetalle"
+        <!-- Textos a la izquierda -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:paddingStart="8dp">
+
+            <TextView
+                android:id="@+id/txtFechaDetalle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:id="@+id/txtGeneroDetalle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:id="@+id/txtPlataformasDetalle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:id="@+id/txtCalificacionDetalle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:layout_marginBottom="10dp" />
+        </LinearLayout>
+
+        <!-- Botón FAVORITO centrado -->
+        <Button
+            android:id="@+id/btnFavoritoJuego"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_marginBottom="10dp" />
+            android:text="Añadir a favoritos"
+            android:textColor="#000000"
+            android:background="@drawable/boton_borde"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp" />
 
-        <TextView
-            android:id="@+id/txtGeneroDetalle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_marginBottom="10dp" />
-
-        <TextView
-            android:id="@+id/txtPlataformasDetalle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_marginBottom="10dp" />
-
-        <TextView
-            android:id="@+id/txtCalificacionDetalle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="italic"
-            android:layout_marginBottom="25dp" />
-
+        <!-- Botón VOLVER centrado -->
         <Button
             android:id="@+id/btnVolver"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Volver" />
+            android:text="Volver"
+            android:layout_gravity="center_horizontal" />
 
     </LinearLayout>
 
