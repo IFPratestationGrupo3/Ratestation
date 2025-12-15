@@ -30,6 +30,6 @@ public class Activity_Splash extends AppCompatActivity {
             Intent intent = new Intent(Activity_Splash.this, Activity_Login.class);
             startActivity(intent);
             finish();
-        }, 2000); // 2000 ms = 2 segundos
+        }, 3000); // 2000 ms = 2 segundos
     }
 }

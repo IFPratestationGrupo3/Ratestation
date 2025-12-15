@@ -13,6 +13,9 @@
     <string name="peliculas_m_s_valoradas">Peliculas más valoradas</string>
     <string name="favoritas">Favoritas</string>
     <string name="inicio_de_sesi_n_exitoso">Inicio de sesión exitoso</string>
+    <string name="tus_peliculas_favoritas">Tus películas favoritas</string>
+    <string name="tus_series_favoritas">Tus series favoritas</string>
+    <string name="tus_juegos_favoritos">Tus juegos favoritos</string>
 
 
 </resources>

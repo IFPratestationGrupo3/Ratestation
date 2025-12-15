@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RateStation">
 
-        <!-- SPLASH: pantalla principal -->
+        <!-- SPLASH -->
         <activity
             android:name=".Activities.Login.Activity_Splash"
             android:exported="true">
@@ -29,13 +29,13 @@
         <!-- Iniciar sesión -->
         <activity android:name=".Activities.Login.Activity_Sign" />
 
-        <!-- (Opcional) Activity_Main si la app continúa ahí después del login -->
+        <!-- Activity_Main -->
         <activity android:name=".Activities.Activity_Main" />
 
         <activity android:name=".Activities.Activity_Pelicula" />
         <activity android:name=".Activities.Activity_Serie" />
         <activity android:name=".Activities.Activity_Juego" />
-        <!--<activity android:name=".Activities.Activity_Podcast" />-->
+
 
     </application>
 

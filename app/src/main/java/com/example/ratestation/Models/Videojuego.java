@@ -26,10 +26,6 @@ public class Videojuego {
     private Tag[] tags;
 
 
-    // ----------------------------
-    // GETTERS
-    // ----------------------------
-
     public String getTitulo() { return titulo; }
 
     public String getFechaLanzamiento() {
@@ -49,11 +45,7 @@ public class Videojuego {
     public String getImagenUrl() { return imagenPortada; }
 
 
-    // ----------------------------
-    // MÉTODOS DE FORMATO
-    // ----------------------------
-
-    // Géneros como: "Acción, RPG, Aventura"
+    // Géneros
     public String getGenerosString() {
         if (generos == null || generos.length == 0)
             return "No disponible";
@@ -69,7 +61,7 @@ public class Videojuego {
         return sb.substring(0, sb.length() - 2);
     }
 
-    // Plataformas como: "PC, PlayStation 5, Switch"
+    // Plataformas
     public String getPlataformasString() {
         if (plataformas == null || plataformas.length == 0)
             return "No disponible";
@@ -95,9 +87,6 @@ public class Videojuego {
     }
 
 
-    // --------------------------------------------------
-    //               CLASES INTERNAS
-    // --------------------------------------------------
 
     public static class Genre {
         @SerializedName("name")

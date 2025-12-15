@@ -5,128 +5,103 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ratestation.Activities.Activity_Juego;
-import com.example.ratestation.Apis.RAWG_API;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.example.ratestation.R;
 
 import java.util.List;
 
 public class FavJuegosAdapter extends RecyclerView.Adapter<FavJuegosAdapter.ViewHolder> {
 
     private final Context context;
-    private final List<String> titulos;
+    private final List<JuegoFavorito> juegos;
 
-    public FavJuegosAdapter(Context context, List<String> titulos) {
+    // Clase para almacenar todos los datos del juego
+    public static class JuegoFavorito {
+        private final String titulo;
+        private final String portadaUrl;
+        private final String fecha;
+        private final String genero;
+        private final String plataformas;
+        private final String calificacion;
+
+        public JuegoFavorito(String titulo, String portadaUrl, String fecha, String genero, String plataformas, String calificacion) {
+            this.titulo = titulo;
+            this.portadaUrl = portadaUrl;
+            this.fecha = fecha;
+            this.genero = genero;
+            this.plataformas = plataformas;
+            this.calificacion = calificacion;
+        }
+
+        // Getters
+        public String getTitulo() { return titulo; }
+        public String getPortadaUrl() { return portadaUrl; }
+        public String getFecha() { return fecha; }
+        public String getGenero() { return genero; }
+        public String getPlataformas() { return plataformas; }
+        public String getCalificacion() { return calificacion; }
+    }
+
+    public FavJuegosAdapter(Context context, List<JuegoFavorito> juegos) {
         this.context = context;
-        this.titulos = titulos;
+        this.juegos = juegos;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_favorito_juego, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String titulo = titulos.get(position);
-        holder.txtTitulo.setText(titulo);
+        JuegoFavorito juego = juegos.get(position);
+        holder.txtTitulo.setText(juego.getTitulo());
 
-        holder.itemView.setOnClickListener(v -> new Thread(() -> {
-            try {
-                // Buscar juego por título
-                String searchJson = RAWG_API.searchGames(titulo);
-                JSONObject root = new JSONObject(searchJson);
-                JSONArray results = root.getJSONArray("results");
+        Glide.with(context)
+                .load(juego.getPortadaUrl())
+                .placeholder(R.drawable.ic_launcher_background) 
+                .error(R.drawable.ic_launcher_background)
+                .into(holder.imgPoster);
 
-                if (results.length() == 0) {
-                    holder.itemView.post(() ->
-                            Toast.makeText(context, "No se encontró información para " + titulo, Toast.LENGTH_SHORT).show()
-                    );
-                    return;
-                }
+        holder.itemView.setOnClickListener(v -> {
+            int currentPosition = holder.getAdapterPosition();
+            if (currentPosition == RecyclerView.NO_POSITION) return;
 
-                JSONObject juegoJson = results.getJSONObject(0);
-                int id = juegoJson.getInt("id");
+            JuegoFavorito clickedJuego = juegos.get(currentPosition);
 
-                // Datos básicos
-                String portada = juegoJson.optString("background_image", "");
-                String fecha = juegoJson.optString("released", "Desconocida");
-                String calificacion = String.valueOf(juegoJson.optDouble("rating", 0));
-
-                // Obtener detalles completos
-                String detallesJson = RAWG_API.fetchGameDetails(id);
-                JSONObject detallesObj = new JSONObject(detallesJson);
-
-                // Géneros
-                JSONArray genresArray = detallesObj.getJSONArray("genres");
-                StringBuilder sbGenero = new StringBuilder();
-                for (int i = 0; i < genresArray.length(); i++) {
-                    sbGenero.append(genresArray.getJSONObject(i).getString("name"));
-                    if (i < genresArray.length() - 1) sbGenero.append(", ");
-                }
-                String generos = sbGenero.toString();
-
-                // Plataformas
-                JSONArray plataformasArray = detallesObj.getJSONArray("platforms");
-                StringBuilder sbPlat = new StringBuilder();
-                for (int i = 0; i < plataformasArray.length(); i++) {
-                    JSONObject platObj = plataformasArray.getJSONObject(i).getJSONObject("platform");
-                    sbPlat.append(platObj.getString("name"));
-                    if (i < plataformasArray.length() - 1) sbPlat.append(", ");
-                }
-                String plataformas = sbPlat.toString();
-
-                // Lanzar Activity en el hilo principal
-                String finalPortada = portada;
-                String finalFecha = fecha;
-                String finalGenero = generos;
-                String finalPlataformas = plataformas;
-                String finalCalificacion = calificacion;
-
-                holder.itemView.post(() -> {
-                    Intent intent = new Intent(context, Activity_Juego.class);
-                    intent.putExtra("titulo", titulo);
-                    intent.putExtra("portada", finalPortada);
-                    intent.putExtra("fecha", finalFecha);
-                    intent.putExtra("genero", finalGenero);
-                    intent.putExtra("plataformas", finalPlataformas);
-                    intent.putExtra("calificacion", finalCalificacion);
-                    context.startActivity(intent);
-                });
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                holder.itemView.post(() ->
-                        Toast.makeText(context, "Error al obtener información de " + titulo, Toast.LENGTH_SHORT).show()
-                );
-            }
-        }).start());
+            Intent intent = new Intent(context, Activity_Juego.class);
+            intent.putExtra("titulo", clickedJuego.getTitulo());
+            intent.putExtra("portada", clickedJuego.getPortadaUrl());
+            intent.putExtra("fecha", clickedJuego.getFecha());
+            intent.putExtra("genero", clickedJuego.getGenero());
+            intent.putExtra("plataformas", clickedJuego.getPlataformas());
+            intent.putExtra("calificacion", clickedJuego.getCalificacion());
+            context.startActivity(intent);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return titulos.size();
+        return juegos.size();
     }
 
-    // -------------------------
-    // ViewHolder interno
-    // -------------------------
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtTitulo;
+        ImageView imgPoster;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtTitulo = itemView.findViewById(android.R.id.text1);
+            txtTitulo = itemView.findViewById(R.id.txtTitulo);
+            imgPoster = itemView.findViewById(R.id.imgPoster);
         }
     }
 }

@@ -11,7 +11,7 @@ import okhttp3.Response;
 public class TMDB_API {
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
 
-    //========================PELICULAS====================================
+    //PELICULAS
     public static String fetchPopularMovies() {
         return fetchFromUrl(BASE_URL + "movie/popular?language=es-ES");
     }
@@ -45,7 +45,7 @@ public class TMDB_API {
         }
     }
 
-    //========================SERIES====================================
+    //SERIES
     public static String fetchPopularSeries() {
         return fetchFromUrl(BASE_URL + "tv/popular?language=es-ES");
     }
@@ -57,7 +57,7 @@ public class TMDB_API {
         String url = BASE_URL + "tv/" + tvId + "?language=es-ES&append_to_response=credits";
         return fetchFromUrl(url);
     }
-    //========================UTILIDADES====================================
+    //UTILIDADES
     private static String fetchFromUrl(String url) {
         OkHttpClient client = new OkHttpClient();
 
