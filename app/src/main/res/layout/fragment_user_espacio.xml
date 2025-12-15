@@ -6,64 +6,121 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
+        android:layout_height="wrap_content">
 
-        <!-- Sección Películas -->
+        <!-- ================= FAVORITOS ================= -->
+
         <TextView
-            android:id="@+id/txtPeliculasFavoritas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tus Películas Favoritas"
-            android:textSize="22sp"
+            android:text="FAVORITOS"
+            android:textSize="26sp"
             android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Películas -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Películas"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:layout_marginBottom="8dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerPeliculasFavoritas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="vertical"
             android:nestedScrollingEnabled="false"/>
 
-        <!-- Sección Series -->
+        <!-- Series -->
         <TextView
-            android:id="@+id/txtSeriesFavoritas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tus Series Favoritas"
-            android:textSize="22sp"
+            android:text="Series"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerSeriesFavoritas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="vertical"
             android:nestedScrollingEnabled="false"/>
 
-        <!-- Sección Juegos (MODIFICADO Y ORGANIZADO) -->
+        <!-- Juegos -->
         <TextView
-            android:id="@+id/txtJuegosFavoritos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tus Juegos Favoritos"
-            android:textSize="22sp"
+            android:text="Juegos"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerJuegosFavoritos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="vertical"
+            android:nestedScrollingEnabled="false"/>
+
+        <!-- ================= PUNTUACIONES ================= -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PUNTUACIONES"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Películas -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Películas"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerPuntuacionesPeliculas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"/>
+
+        <!-- Series -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Series"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerPuntuacionesSeries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"/>
+
+        <!-- Juegos -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Juegos"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerPuntuacionesJuegos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"/>
 
     </LinearLayout>

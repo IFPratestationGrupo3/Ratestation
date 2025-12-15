@@ -1,5 +1,4 @@
 package com.example.ratestation.Adapters.Favoritos;
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -24,6 +23,7 @@ public class FavPeliculasAdapter extends RecyclerView.Adapter<FavPeliculasAdapte
     private Context context;
     private List<String> titulos;
 
+    // Constructor recibe solo la lista de títulos
     public FavPeliculasAdapter(Context context, List<String> titulos) {
         this.context = context;
         this.titulos = titulos;
@@ -32,7 +32,8 @@ public class FavPeliculasAdapter extends RecyclerView.Adapter<FavPeliculasAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false);
+        View view = LayoutInflater.from(context)
+                .inflate(android.R.layout.simple_list_item_1, parent, false);
         return new ViewHolder(view);
     }
 
