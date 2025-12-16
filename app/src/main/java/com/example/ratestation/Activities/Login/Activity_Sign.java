@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ratestation.Activities.Activity_Login;
 import com.example.ratestation.Activities.Activity_Main;
 import com.example.ratestation.R;
 import com.google.firebase.FirebaseApp;

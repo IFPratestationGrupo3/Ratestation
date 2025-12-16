@@ -1,4 +1,4 @@
-package com.example.ratestation.Activities.Login;
+package com.example.ratestation.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -7,6 +7,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ratestation.Activities.Login.Activity_CreateAccount;
+import com.example.ratestation.Activities.Login.Activity_Sign;
 import com.example.ratestation.R;
 
 public class Activity_Login extends AppCompatActivity {

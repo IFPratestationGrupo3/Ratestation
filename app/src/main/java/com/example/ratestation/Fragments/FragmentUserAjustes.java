@@ -18,7 +18,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.example.ratestation.Activities.Login.Activity_Login;
+import com.example.ratestation.Activities.Activity_Login;
 import com.example.ratestation.R;
 import com.google.firebase.auth.FirebaseAuth;
 

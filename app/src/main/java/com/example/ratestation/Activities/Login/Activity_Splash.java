@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ratestation.Activities.Activity_Login;
 import com.example.ratestation.R;
 
 public class Activity_Splash extends AppCompatActivity {
