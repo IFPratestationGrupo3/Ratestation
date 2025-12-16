@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -69,16 +68,19 @@
                 android:textAlignment="viewStart"
                 android:textSize="16sp" />
 
-            <com.google.android.material.slider.Slider
-                android:id="@+id/sliderPuntuacion"
-                android:layout_width="match_parent"
+            <RatingBar
+                android:id="@+id/ratingBarPelicula"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:valueFrom="1"
-                android:valueTo="5"
+                android:layout_gravity="center_horizontal"
+                android:numStars="5"
                 android:stepSize="0.5"
-                android:layout_marginBottom="16dp"
-                app:thumbColor="@color/teal_700"
-                app:trackColor="@color/black" />
+                android:rating="3.0"
+                android:progressTint="@color/amarillo_oscuro"
+                android:secondaryProgressTint="@color/amarillo_oscuro"
+                android:progressBackgroundTint="@color/gris_claro"
+                android:layout_marginBottom="20dp"
+                android:isIndicator="false"/>
 
             <Button
                 android:id="@+id/btnFavorita"

@@ -1,7 +1,9 @@
 package com.example.ratestation.Activities;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,24 +14,35 @@ import com.example.ratestation.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Activity_Serie extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
+    private boolean isFavorita = false;
+    private String tituloSerie;
+
+    private Handler toastHandler = new Handler();
+    private Runnable toastRunnable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_serie);
 
-        // Firebase
+        // Inicialización Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Views
+        // Referencias a elementos de UI
+        RatingBar ratingBar = findViewById(R.id.ratingBarSerie);
         ImageView imgPoster = findViewById(R.id.imgPosterSerieDetalle);
         TextView txtTitulo = findViewById(R.id.txtTituloSerieDetalle);
         TextView txtFecha = findViewById(R.id.txtFechaSerie);
@@ -37,18 +50,18 @@ public class Activity_Serie extends AppCompatActivity {
         TextView txtGenero = findViewById(R.id.txtGeneroSerie);
         TextView txtSinopsis = findViewById(R.id.txtSinopsisSerie);
         Button btnVolver = findViewById(R.id.btnVolverSerie);
-        Button btnFavorita = findViewById(R.id.btnFavorita);
+        Button btnFavorita = findViewById(R.id.btnFavoritaSerie);
 
-        // Recuperar datos del Intent
-        String titulo = getIntent().getStringExtra("titulo");
+        // Recibir datos enviados desde el Adapter
+        tituloSerie = getIntent().getStringExtra("titulo");
         String poster = getIntent().getStringExtra("poster");
         String anio = getIntent().getStringExtra("anio");
         String director = getIntent().getStringExtra("director");
         String generos = getIntent().getStringExtra("generos");
         String sinopsis = getIntent().getStringExtra("sinopsis");
 
-        // Mostrar datos
-        txtTitulo.setText(titulo != null ? titulo : "Título no disponible");
+        // Mostrar datos en pantalla
+        txtTitulo.setText(tituloSerie != null ? tituloSerie : "Título no disponible");
         txtFecha.setText(anio != null ? "Año: " + anio : "Año no disponible");
         txtDirector.setText(director != null ? "Director: " + director : "Director no disponible");
         txtGenero.setText(generos != null ? "Género: " + generos : "Género no disponible");
@@ -59,61 +72,115 @@ public class Activity_Serie extends AppCompatActivity {
                 .placeholder(R.drawable.ratelogo)
                 .into(imgPoster);
 
+        // Volver
         btnVolver.setOnClickListener(v -> finish());
 
-        // Comprobar si ya está en favoritas
-        comprobarFavorita(titulo, btnFavorita);
+        // Comprobar estado inicial de favorita
+        comprobarFavorita(btnFavorita);
 
-        // Agregar a favoritas
-        btnFavorita.setOnClickListener(v -> agregarAFavoritas(titulo, btnFavorita));
+        // RatingBar
+        ratingBar.setOnRatingBarChangeListener((bar, rating, fromUser) -> {
+            guardarPuntuacionSerie(tituloSerie, rating);
+
+            if (toastRunnable != null) toastHandler.removeCallbacks(toastRunnable);
+
+            float puntuacionFinal = rating;
+            toastRunnable = () -> Toast.makeText(
+                    Activity_Serie.this,
+                    "Puntuación guardada: " + puntuacionFinal,
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            toastHandler.postDelayed(toastRunnable, 2000);
+        });
+
+        // Cargar puntuación guardada en Firebase
+        cargarPuntuacionGuardada(ratingBar);
     }
 
-    @SuppressWarnings("unchecked")
-    private void comprobarFavorita(String tituloSerie, Button btnFavorita) {
-        if (mAuth.getCurrentUser() == null) return;
+    // Guardar la puntuación seleccionada en Firebase
+    private void guardarPuntuacionSerie(String tituloSerie, float puntuacion) {
+        if (mAuth.getCurrentUser() == null || tituloSerie == null) return;
+
+        String userId = mAuth.getCurrentUser().getUid();
+
+        Map<String, Object> nuevaPuntuacion = new HashMap<>();
+        nuevaPuntuacion.put(tituloSerie, puntuacion);
+
+        db.collection("usuarios").document(userId)
+                .set(Collections.singletonMap("PuntuacionesSeries", nuevaPuntuacion), SetOptions.merge())
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Error guardando puntuación", Toast.LENGTH_SHORT).show()
+                );
+    }
+
+    // Cargar la puntuación guardada desde Firebase
+    private void cargarPuntuacionGuardada(RatingBar ratingBar) {
+        if (mAuth.getCurrentUser() == null || tituloSerie == null) return;
         String userId = mAuth.getCurrentUser().getUid();
 
         db.collection("usuarios").document(userId).get()
                 .addOnSuccessListener(doc -> {
-                    List<String> favoritas = (List<String>) doc.get("SeriesFav");
-                    if (favoritas != null && favoritas.contains(tituloSerie)) {
-                        btnFavorita.setText("Eliminar de favoritas");
-                        btnFavorita.setOnClickListener(v -> eliminarDeFavoritas(tituloSerie, btnFavorita));
-                    } else {
-                        btnFavorita.setText("Agregar a favoritas");
-                        btnFavorita.setOnClickListener(v -> agregarAFavoritas(tituloSerie, btnFavorita));
+                    if (doc.exists()) {
+                        Map<String, Object> puntuaciones =
+                                (Map<String, Object>) doc.get("PuntuacionesSeries");
+
+                        if (puntuaciones != null && puntuaciones.containsKey(tituloSerie)) {
+                            Double puntuacionDouble = (Double) puntuaciones.get(tituloSerie);
+                            if (puntuacionDouble != null) {
+                                ratingBar.setRating(puntuacionDouble.floatValue());
+                            }
+                        }
                     }
                 });
     }
 
-    private void eliminarDeFavoritas(String tituloSerie, Button btnFavorita) {
-        if (mAuth.getCurrentUser() == null) return;
+    // Favoritas
+    @SuppressWarnings("unchecked")
+    private void comprobarFavorita(Button btnFavorita) {
+        if (mAuth.getCurrentUser() == null || tituloSerie == null) return;
         String userId = mAuth.getCurrentUser().getUid();
 
-        db.collection("usuarios").document(userId)
-                .update("SeriesFav", FieldValue.arrayRemove(tituloSerie))
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "Serie eliminada de favoritas", Toast.LENGTH_SHORT).show();
-                    btnFavorita.setText("Agregar a favoritas");
-                    btnFavorita.setOnClickListener(v -> agregarAFavoritas(tituloSerie, btnFavorita));
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Error eliminando de favoritas", Toast.LENGTH_SHORT).show();
+        db.collection("usuarios").document(userId).get()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        List<String> favoritas = (List<String>) doc.get("SeriesFav");
+                        if (favoritas != null && favoritas.contains(tituloSerie)) {
+                            isFavorita = true;
+                            btnFavorita.setText("Eliminar de favoritas");
+                            btnFavorita.setOnClickListener(v -> eliminarDeFavoritas(btnFavorita));
+                        } else {
+                            isFavorita = false;
+                            btnFavorita.setText("Agregar a favoritas");
+                            btnFavorita.setOnClickListener(v -> agregarAFavoritas(btnFavorita));
+                        }
+                    }
                 });
     }
 
-    private void agregarAFavoritas(String tituloSerie, Button btnFavorita) {
-        if (mAuth.getCurrentUser() == null) return;
+    private void agregarAFavoritas(Button btnFavorita) {
+        if (mAuth.getCurrentUser() == null || tituloSerie == null) return;
         String userId = mAuth.getCurrentUser().getUid();
 
         db.collection("usuarios").document(userId)
                 .update("SeriesFav", FieldValue.arrayUnion(tituloSerie))
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Serie agregada a favoritas", Toast.LENGTH_SHORT).show();
-                    comprobarFavorita(tituloSerie, btnFavorita);
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Error agregando a favoritas", Toast.LENGTH_SHORT).show();
+                    isFavorita = true;
+                    btnFavorita.setText("Eliminar de favoritas");
+                });
+    }
+
+    private void eliminarDeFavoritas(Button btnFavorita) {
+        if (mAuth.getCurrentUser() == null || tituloSerie == null) return;
+        String userId = mAuth.getCurrentUser().getUid();
+
+        db.collection("usuarios").document(userId)
+                .update("SeriesFav", FieldValue.arrayRemove(tituloSerie))
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Serie eliminada de favoritas", Toast.LENGTH_SHORT).show();
+                    isFavorita = false;
+                    btnFavorita.setText("Agregar a favoritas");
                 });
     }
 }

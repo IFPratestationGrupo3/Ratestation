@@ -23,7 +23,6 @@ public class PODCAST_API {
 
     /**
      * Realiza la llamada a la API de iTunes en un hilo de fondo.
-     * @param callback El listener maneja el éxito d ela llamada o el fracaso.
      */
     public static void fetchPodcasts(ApiCallback callback) {
         new Thread(() -> {

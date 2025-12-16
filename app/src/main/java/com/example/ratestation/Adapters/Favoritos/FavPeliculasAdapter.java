@@ -31,6 +31,7 @@ public class FavPeliculasAdapter extends RecyclerView.Adapter<FavPeliculasAdapte
         private final String director;
         private final String generos;
 
+
         public PeliculaFavorita(String titulo, String posterUrl, String anio, String sinopsis, String director, String generos) {
             this.titulo = titulo;
             this.posterUrl = posterUrl;
