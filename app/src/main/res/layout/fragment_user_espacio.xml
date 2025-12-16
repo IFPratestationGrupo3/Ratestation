@@ -1,70 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    tools:context="com.example.ratestation.Fragments.FragmentUserEspacio">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
 
         <!-- Sección Películas -->
         <TextView
             android:id="@+id/txtPeliculasFavoritas"
-            android:layout_width="wrap_content"
+            style="@style/TextAppearance.Material3.TitleLarge"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tus Películas Favoritas"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="16dp"
+            android:text="@string/tus_peliculas_favoritas"
+            android:paddingHorizontal="16dp"
             android:layout_marginBottom="8dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerPeliculasFavoritas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="vertical"
-            android:nestedScrollingEnabled="false"/>
+            android:clipToPadding="false"
+            android:paddingHorizontal="16dp"
+            tools:orientation="horizontal"/>
 
         <!-- Sección Series -->
         <TextView
             android:id="@+id/txtSeriesFavoritas"
-            android:layout_width="wrap_content"
+            style="@style/TextAppearance.Material3.TitleLarge"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tus Series Favoritas"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="24dp"
+            android:text="@string/tus_series_favoritas"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="16dp"
             android:layout_marginBottom="8dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerSeriesFavoritas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="vertical"
-            android:nestedScrollingEnabled="false"/>
+            android:clipToPadding="false"
+            android:paddingHorizontal="16dp"
+            tools:orientation="horizontal"/>
 
-        <!-- Sección Juegos (MODIFICADO Y ORGANIZADO) -->
+        <!-- Sección Juegos -->
         <TextView
             android:id="@+id/txtJuegosFavoritos"
-            android:layout_width="wrap_content"
+            style="@style/TextAppearance.Material3.TitleLarge"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tus Juegos Favoritos"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="24dp"
+            android:text="@string/tus_juegos_favoritos"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="16dp"
             android:layout_marginBottom="8dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerJuegosFavoritos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="vertical"
-            android:nestedScrollingEnabled="false"/>
+            android:clipToPadding="false"
+            android:paddingHorizontal="16dp"
+            tools:orientation="horizontal"/>
 
     </LinearLayout>
 </ScrollView>

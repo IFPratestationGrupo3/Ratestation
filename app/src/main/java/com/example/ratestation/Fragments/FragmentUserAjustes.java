@@ -18,7 +18,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.example.ratestation.Activities.Activity_Login;
+import com.example.ratestation.Activities.Login.Activity_Login;
 import com.example.ratestation.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -39,7 +39,7 @@ public class FragmentUserAjustes extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_user_ajustes, container, false);
 
-        // --- MODO OSCURO ---
+        //MODO OSCURO
         SwitchCompat darkModeSwitch = view.findViewById(R.id.darkModeSwitch);
         int currentNightMode = AppCompatDelegate.getDefaultNightMode();
         darkModeSwitch.setChecked(currentNightMode == AppCompatDelegate.MODE_NIGHT_YES);
@@ -53,7 +53,7 @@ public class FragmentUserAjustes extends Fragment {
             requireActivity().recreate(); // Recargar para aplicar tema
         });
 
-        // --- TAMAÑO DE FUENTE ---
+        // TAMAÑO DE FUENTE
         fontSizeRadioGroup = view.findViewById(R.id.fontSizeRadioGroup);
         fontNormal = view.findViewById(R.id.fontNormal);
         fontLarge = view.findViewById(R.id.fontLarge);
@@ -80,7 +80,7 @@ public class FragmentUserAjustes extends Fragment {
         });
 
 
-        //-- BOTÓN CERRAR SESIÓN --
+        //BOTÓN CERRAR SESIÓN
 
         // Se inicializa Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -102,7 +102,7 @@ public class FragmentUserAjustes extends Fragment {
                 // Usamos getActivity() para obtener el contexto de la actividad que contiene el fragmento
                 Intent intent = new Intent(getActivity(), Activity_Login.class);
 
-                // 6. Se Limpia el historial de actividades para que el usuario no pueda volver atrás y el logout sea correcto
+                // Se Limpia el historial de actividades para que el usuario no pueda volver atrás y el logout sea correcto
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                 startActivity(intent);

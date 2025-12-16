@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ratestation">
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -9,10 +8,9 @@
         android:label="RateStation"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.RateStation">
 
-        <!-- SPLASH: pantalla principal -->
+        <!-- SPLASH -->
         <activity
             android:name=".Activities.Login.Activity_Splash"
             android:exported="true">
@@ -23,14 +21,7 @@
         </activity>
 
         <!-- Registro con opciones -->
-        <activity android:name=".Activities.Activity_Login" />
-
-        <!-- Resetear password -->
-        <activity
-            android:name=".Activities.Login.Activity_PasswordReset"
-            android:exported="false"
-            android:theme="@style/Theme.RateStation">
-        </activity>
+        <activity android:name=".Activities.Login.Activity_Login" />
 
         <!-- Crear cuenta -->
         <activity android:name=".Activities.Login.Activity_CreateAccount" />
@@ -38,15 +29,13 @@
         <!-- Iniciar sesión -->
         <activity android:name=".Activities.Login.Activity_Sign" />
 
-        <!-- (Opcional) Activity_Main si la app continúa ahí después del login -->
+        <!-- Activity_Main -->
         <activity android:name=".Activities.Activity_Main" />
 
         <activity android:name=".Activities.Activity_Pelicula" />
         <activity android:name=".Activities.Activity_Serie" />
         <activity android:name=".Activities.Activity_Juego" />
-        <!--<activity android:name=".Activities.Activity_Podcast" />-->
 
-        <activity android:name=".Activities.Activity_Podcast" />
 
     </application>
 

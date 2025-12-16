@@ -84,16 +84,7 @@ public class PeliculaAdapter extends RecyclerView.Adapter<PeliculaAdapter.ViewHo
                         Intent intent = new Intent(context, Activity_Pelicula.class);
                         intent.putExtra("titulo", pelicula.getTitulo());
                         intent.putExtra("poster", posterUrl);
-
-                        String fechaEstreno = pelicula.getFechaEstreno();
-
-                        // Comprueba que NO es null Y que la longitud es >= 4
-                        if (fechaEstreno != null && fechaEstreno.length() >= 4) {
-                            intent.putExtra("anio", fechaEstreno.substring(0, 4));
-                        } else {
-                            // Si no es válido, envía una cadena segura (vacía o "N/A")
-                            intent.putExtra("anio", "N/A");
-                        }
+                        intent.putExtra("anio", pelicula.getFechaEstreno() != null ? pelicula.getFechaEstreno().substring(0,4) : "");
                         intent.putExtra("sinopsis", pelicula.getSinopsis());
                         intent.putExtra("director", pelicula.getDirector());
                         intent.putExtra("generos", pelicula.getGeneros());

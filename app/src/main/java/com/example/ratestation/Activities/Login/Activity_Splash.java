@@ -10,7 +10,6 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.ratestation.Activities.Activity_Login;
 import com.example.ratestation.R;
 
 public class Activity_Splash extends AppCompatActivity {
@@ -31,6 +30,6 @@ public class Activity_Splash extends AppCompatActivity {
             Intent intent = new Intent(Activity_Splash.this, Activity_Login.class);
             startActivity(intent);
             finish();
-        }, 2000); // 2000 ms = 2 segundos
+        }, 3000); // 2000 ms = 2 segundos
     }
 }

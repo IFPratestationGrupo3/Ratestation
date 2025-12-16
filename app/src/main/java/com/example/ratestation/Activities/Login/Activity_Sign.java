@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.ratestation.Activities.Activity_Login;
 import com.example.ratestation.Activities.Activity_Main;
 import com.example.ratestation.R;
 import com.google.firebase.FirebaseApp;
@@ -38,7 +37,7 @@ public class Activity_Sign extends AppCompatActivity {
         forgotPasswordLink = findViewById(R.id.forgotPasswordLink);
 
       /*
-        // INICIO DE SESIÓN SIMULADO AUTOMÁTICO
+        // Parche para entrar automaticamente
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(Activity_Sign.this, Activity_Main.class);
             startActivity(intent);

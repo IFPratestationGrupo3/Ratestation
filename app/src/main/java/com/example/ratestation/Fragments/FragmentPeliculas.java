@@ -66,7 +66,6 @@ public class FragmentPeliculas extends Fragment {
 
         spinnerGeneros = view.findViewById(R.id.spinnerGeneros);
         rvValoradas = view.findViewById(R.id.rvValoradas);
-        // AQUI HAY QUE PONER UN APARTADO DE PELICULAS MARCADAS POR MI PARA QUE ME AVISE DE QUE SALIERON
 
         // Lista de géneros + "Novedades" inicial
         List<String> listaGeneros = new ArrayList<>();
@@ -86,8 +85,8 @@ public class FragmentPeliculas extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (!spinnerInicializado) {
-                    spinnerInicializado = true; // ignorar primera selección automática
-                    cargarPeliculasValoradas(); // cargar novedades al inicio
+                    spinnerInicializado = true;
+                    cargarPeliculasValoradas();
                     return;
                 }
 

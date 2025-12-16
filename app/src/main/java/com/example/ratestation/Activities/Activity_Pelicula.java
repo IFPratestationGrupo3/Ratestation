@@ -1,5 +1,6 @@
 package com.example.ratestation.Activities;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,17 +10,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.ratestation.R;
+import com.google.android.material.slider.Slider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FieldValue;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Activity_Pelicula extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private Handler toastHandler = new Handler();
+    private Runnable toastRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +37,18 @@ public class Activity_Pelicula extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+        // Slider puntuacion
+        Slider sliderPuntuacion = findViewById(R.id.sliderPuntuacion);
+        sliderPuntuacion.setValue(3.0f); // puntuación por defecto
+
         // Views
         ImageView imgPoster = findViewById(R.id.imgPosterDetalle);
         TextView txtTitulo = findViewById(R.id.txtTituloDetalle);
         TextView txtAnio = findViewById(R.id.txtAnio);
         TextView txtDirector = findViewById(R.id.txtDirector);
         TextView txtGenero = findViewById(R.id.txtGenero);
-        TextView txtSipnosis = findViewById(R.id.txtSinopsis);
+        TextView txtSinopsis = findViewById(R.id.txtSinopsis);
         Button btnVolver = findViewById(R.id.btnVolver);
-
-        // Botón favoritas
         Button btnFavorita = findViewById(R.id.btnFavorita);
 
         // Datos de la película
@@ -55,7 +64,7 @@ public class Activity_Pelicula extends AppCompatActivity {
         txtAnio.setText("Año: " + anio);
         txtDirector.setText("Director: " + director);
         txtGenero.setText("Género: " + generos);
-        txtSipnosis.setText(sinopsis);
+        txtSinopsis.setText(sinopsis);
         Glide.with(this).load(poster).into(imgPoster);
 
         // Botón volver
@@ -66,7 +75,53 @@ public class Activity_Pelicula extends AppCompatActivity {
 
         // Agregar a favoritas
         btnFavorita.setOnClickListener(v -> agregarAFavoritas(titulo, btnFavorita));
+
+        // Listener del slider: guardar y mostrar Toast 3s después de soltar
+        sliderPuntuacion.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+            @Override
+            public void onStartTrackingTouch(Slider slider) {
+                // No hacemos nada al empezar a tocar
+            }
+
+            @Override
+            public void onStopTrackingTouch(Slider slider) {
+                float value = slider.getValue();
+
+                // Guardamos la puntuación inmediatamente
+                guardarPuntuacion(titulo, value);
+
+                // Cancelamos cualquier Toast pendiente
+                if (toastRunnable != null) {
+                    toastHandler.removeCallbacks(toastRunnable);
+                }
+
+                // Creamos un Runnable para mostrar el Toast después de 3 segundos
+                float puntuacionFinal = value;
+                toastRunnable = () -> Toast.makeText(Activity_Pelicula.this,
+                        "Puntuación guardada: " + puntuacionFinal, Toast.LENGTH_SHORT).show();
+
+                toastHandler.postDelayed(toastRunnable, 3000);
+            }
+        });
     }
+
+    private void guardarPuntuacion(String tituloPelicula, float puntuacion) {
+        if (mAuth.getCurrentUser() == null) return;
+        String currentUserId = mAuth.getCurrentUser().getUid();
+
+        Map<String, Object> nuevaPuntuacion = new HashMap<>();
+        nuevaPuntuacion.put(tituloPelicula, puntuacion);
+
+        db.collection("usuarios").document(currentUserId)
+                .set(Collections.singletonMap("Puntuaciones", nuevaPuntuacion), com.google.firebase.firestore.SetOptions.merge())
+                .addOnSuccessListener(aVoid -> {
+                    // No mostramos Toast aquí, ya lo hace el handler del slider
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error guardando puntuación", Toast.LENGTH_SHORT).show();
+                });
+    }
+
     @SuppressWarnings("unchecked")
     private void comprobarFavorita(String tituloPelicula, Button btnFavorita) {
         if (mAuth.getCurrentUser() == null) return;
@@ -84,6 +139,7 @@ public class Activity_Pelicula extends AppCompatActivity {
                     }
                 });
     }
+
     private void eliminarDeFavoritas(String tituloPelicula, Button btnFavorita) {
         if (mAuth.getCurrentUser() == null) return;
         String currentUserId = mAuth.getCurrentUser().getUid();
@@ -100,7 +156,6 @@ public class Activity_Pelicula extends AppCompatActivity {
                 });
     }
 
-
     private void agregarAFavoritas(String tituloPelicula, Button btnFavorita) {
         if (mAuth.getCurrentUser() == null) return;
         String currentUserId = mAuth.getCurrentUser().getUid();
@@ -109,7 +164,6 @@ public class Activity_Pelicula extends AppCompatActivity {
                 .update("PeliculasFav", FieldValue.arrayUnion(tituloPelicula))
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Película agregada a favoritas", Toast.LENGTH_SHORT).show();
-                    // Actualiza el botón
                     comprobarFavorita(tituloPelicula, btnFavorita);
                 })
                 .addOnFailureListener(e -> {

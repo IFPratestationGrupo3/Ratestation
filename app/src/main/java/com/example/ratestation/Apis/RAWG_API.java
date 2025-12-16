@@ -22,10 +22,8 @@ public class RAWG_API {
     // Cliente HTTP reutilizable
     private static final OkHttpClient client = new OkHttpClient();
 
-    // =====================================================================================
-    //  JUEGOS POPULARES
-    // =====================================================================================
 
+    //  JUEGOS POPULARES
     /**
      * Obtiene los juegos más populares ordenados por calificación.
      *
@@ -36,11 +34,8 @@ public class RAWG_API {
         return fetchFromUrl(url);
     }
 
-    // =====================================================================================
     //  JUEGOS POR GÉNERO
-    // =====================================================================================
-
-    /**
+        /**
      * Obtiene una lista de juegos filtrados por género.
      *
      * @param genreSlug Slug del género (ej: "action", "adventure", "rpg")
@@ -51,11 +46,8 @@ public class RAWG_API {
         return fetchFromUrl(url);
     }
 
-    // =====================================================================================
     //  DETALLES DE JUEGO POR ID
-    // =====================================================================================
-
-    /**
+        /**
      * Obtiene información completa y detallada de un videojuego.
      *
      * @param gameId ID del juego en RAWG
@@ -66,11 +58,9 @@ public class RAWG_API {
         return fetchFromUrl(url);
     }
 
-    // =====================================================================================
-    //  BÚSQUEDA DE JUEGOS (POR TÍTULO)
-    // =====================================================================================
 
-    /**
+    //  BÚSQUEDA DE JUEGOS (POR TÍTULO)
+       /**
      * Busca juegos por título.
      * Este método es el que utiliza el adapter `FavJuegosAdapter`.
      *
@@ -93,11 +83,8 @@ public class RAWG_API {
         return fetchFromUrl(url);
     }
 
-    // =====================================================================================
-    //  MÉTODO GENERAL PARA REALIZAR PETICIONES HTTP
-    // =====================================================================================
 
-    /**
+        /**
      * Método genérico que realiza la petición HTTP GET a la URL indicada.
      *
      * @param url URL completa del endpoint RAWG
