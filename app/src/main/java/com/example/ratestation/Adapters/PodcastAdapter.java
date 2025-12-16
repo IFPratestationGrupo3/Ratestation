@@ -1,14 +1,15 @@
 package com.example.ratestation.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ratestation.Activities.Activity_Podcast;
 import com.example.ratestation.Models.Podcast;
 import com.example.ratestation.R;
 
@@ -16,64 +17,54 @@ import java.util.List;
 
 public class PodcastAdapter extends RecyclerView.Adapter<PodcastAdapter.ViewHolder> {
 
-    private final Context context;
-    private final List<Podcast> podcasts;
-    private final PodcastClickListener listener;
+    private final List<Podcast> podcastList;
 
-    // Interfaz public para comunicar clics
-    public interface PodcastClickListener {
-        void onPodcastClick(Podcast podcast);
-    }
-
-
-    public PodcastAdapter(Context context, List<Podcast> podcasts, PodcastClickListener listener) {
-        this.context = context;
-        this.podcasts = podcasts;
-        this.listener = listener;
-    }
-
-    /**
-     * Método para actualizar la lista de podcasts y refrescar la vista.
-     */
-    public void updateData(List<Podcast> newPodcasts) {
-        this.podcasts.clear();
-        this.podcasts.addAll(newPodcasts);
-        notifyDataSetChanged();
+    public PodcastAdapter(List<Podcast> podcastList) {
+        this.podcastList = podcastList;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_podcast, parent, false);
+    public PodcastAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_podcast, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Podcast podcast = podcasts.get(position);
+    public void onBindViewHolder(@NonNull PodcastAdapter.ViewHolder holder, int position) {
+        Podcast podcast = podcastList.get(position);
+        if (podcast != null && podcast.getTitulo() != null) {
+            holder.title.setText(podcast.getTitulo());
+        }
 
-        holder.txtTitulo.setText(podcast.getTitulo());
-        holder.txtCreador.setText("Creador: " + podcast.getCreador());
-
+        // Configurar el OnClickListener
         holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onPodcastClick(podcast);
-            }
+            Context context = v.getContext();
+            Intent intent = new Intent(context, Activity_Podcast.class);
+
+            // Poner los datos del podcast en el Intent
+            intent.putExtra("titulo", podcast.getTitulo());
+            intent.putExtra("creador", podcast.getCreador());
+            intent.putExtra("artworkUrl", podcast.getArtworkPath());
+            intent.putExtra("genero", podcast.getGeneroPrincipal());
+            // Podrías pasar más datos aquí si los necesitaras
+
+            context.startActivity(intent);
         });
     }
 
     @Override
-    public int getItemCount() { return podcasts.size(); }
+    public int getItemCount() {
+        return podcastList.size();
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView title;
 
-        TextView txtTitulo, txtCreador;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            txtTitulo = itemView.findViewById(R.id.txtPodcastTitle);
-            txtCreador = itemView.findViewById(R.id.txtCreator);
+        public ViewHolder(View view) {
+            super(view);
+            title = view.findViewById(R.id.podcast_title);
         }
     }
 }

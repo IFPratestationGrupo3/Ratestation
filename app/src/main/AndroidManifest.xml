@@ -35,6 +35,7 @@
         <activity android:name=".Activities.Activity_Pelicula" />
         <activity android:name=".Activities.Activity_Serie" />
         <activity android:name=".Activities.Activity_Juego" />
+        <activity android:name=".Activities.Activity_Podcast" />
 
 
     </application>
